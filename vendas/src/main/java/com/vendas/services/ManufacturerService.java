@@ -1,5 +1,6 @@
 package com.vendas.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class ManufacturerService {
 	public Manufacturer getById(Long id) {
 		Optional<Manufacturer> manufacturer = repository.findById(id);
 		return manufacturer.get();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Manufacturer> getAll() {
+		return repository.findAll();
 	}
 
 }

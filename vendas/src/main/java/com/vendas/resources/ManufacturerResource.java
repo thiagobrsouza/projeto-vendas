@@ -1,5 +1,7 @@
 package com.vendas.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,12 @@ public class ManufacturerResource {
 	public ResponseEntity<Manufacturer> getById(@PathVariable Long id) {
 		Manufacturer manufacturer = service.getById(id);
 		return ResponseEntity.ok().body(manufacturer);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<Manufacturer>> getAll() {
+		List<Manufacturer> list = service.getAll();
+		return ResponseEntity.ok().body(list);
 	}
 
 }
