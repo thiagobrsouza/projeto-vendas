@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.vendas.services.exceptions.DataIntegrityViolationException;
 import com.vendas.services.exceptions.EntityNotFoundException;
 
 @ControllerAdvice
@@ -23,6 +24,17 @@ public class ResourceExceptionHandler {
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<StandardError> entityConflict(DataIntegrityViolationException e, HttpServletRequest request) {
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(HttpStatus.CONFLICT.value());
+		err.setError("Object already exists!");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
 	}
 
 }
