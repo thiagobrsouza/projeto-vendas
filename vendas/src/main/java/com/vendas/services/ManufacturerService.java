@@ -39,5 +39,10 @@ public class ManufacturerService {
 		repository.save(manufacturerFounded);
 		return manufacturerFounded;
 	}
+	
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
 
 }
