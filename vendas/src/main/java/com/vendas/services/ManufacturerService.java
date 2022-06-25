@@ -31,5 +31,13 @@ public class ManufacturerService {
 	public List<Manufacturer> getAll() {
 		return repository.findAll();
 	}
+	
+	@Transactional
+	public Manufacturer update(Long id, Manufacturer manufacturer) {
+		Manufacturer manufacturerFounded = getById(id);
+		manufacturerFounded.setName(manufacturer.getName());
+		repository.save(manufacturerFounded);
+		return manufacturerFounded;
+	}
 
 }
