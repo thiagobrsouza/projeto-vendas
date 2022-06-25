@@ -1,7 +1,6 @@
 package com.vendas.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendas.entities.Manufacturer;
 import com.vendas.repositories.ManufacturerRepository;
+import com.vendas.services.exceptions.EntityNotFoundException;
 
 @Service
 public class ManufacturerService {
@@ -23,8 +23,9 @@ public class ManufacturerService {
 	
 	@Transactional(readOnly = true)
 	public Manufacturer getById(Long id) {
-		Optional<Manufacturer> manufacturer = repository.findById(id);
-		return manufacturer.get();
+		Manufacturer manufacturer = repository.findById(id).orElseThrow(
+			() -> new EntityNotFoundException("Fornecedor não encontrado. Id: " + id));
+		return manufacturer;
 	}
 	
 	@Transactional(readOnly = true)
