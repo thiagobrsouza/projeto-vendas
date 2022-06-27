@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendas.entities.Product;
 import com.vendas.repositories.ProductRepository;
-import com.vendas.services.exceptions.DataIntegrityViolationException;
+import com.vendas.services.exceptions.DataIntegrityException;
 import com.vendas.services.exceptions.EntityNotFoundException;
 
 @Service
@@ -21,7 +21,7 @@ public class ProductService {
 	public Product create(Product product) {
 		Product exists = repository.findByName(product.getName());
 		if (exists != null) {
-			throw new DataIntegrityViolationException("Produto já cadastrado!");
+			throw new DataIntegrityException("Produto já cadastrado!");
 		}
 		return repository.save(product);
 	}
@@ -43,9 +43,11 @@ public class ProductService {
 		Product productFounded = getById(id);
 		Product exists = repository.findByName(product.getName());
 		if (exists != null && exists.getId() != productFounded.getId()) {
-			throw new DataIntegrityViolationException("Produto já cadastrado!");
+			throw new DataIntegrityException("Produto já cadastrado!");
 		}
 		productFounded.setName(product.getName());
+		productFounded.setPrice(product.getPrice());
+		productFounded.setManufacturer(product.getManufacturer());
 		repository.save(productFounded);
 		return productFounded;
 	}

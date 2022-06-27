@@ -9,8 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.vendas.services.exceptions.DataIntegrityViolationException;
+import com.vendas.services.exceptions.DataIntegrityException;
 import com.vendas.services.exceptions.EntityNotFoundException;
+import com.vendas.services.exceptions.EntityRelationshipException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -26,8 +27,8 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<StandardError> entityConflict(DataIntegrityViolationException e, HttpServletRequest request) {
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> entityConflict(DataIntegrityException e, HttpServletRequest request) {
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
 		err.setStatus(HttpStatus.CONFLICT.value());
@@ -35,6 +36,17 @@ public class ResourceExceptionHandler {
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+	}
+	
+	@ExceptionHandler(EntityRelationshipException.class)
+	public ResponseEntity<StandardError> entityRelationship(EntityRelationshipException e, HttpServletRequest request) {
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(HttpStatus.BAD_REQUEST.value());
+		err.setError("Entity with Relationship!");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 
 }

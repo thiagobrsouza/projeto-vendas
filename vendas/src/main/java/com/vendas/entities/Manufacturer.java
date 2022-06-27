@@ -3,7 +3,6 @@ package com.vendas.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
